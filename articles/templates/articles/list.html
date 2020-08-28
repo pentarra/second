@@ -5,22 +5,18 @@
 {% endblock %}
 
 {% block content %}
-    <div class="page-header">
-            <h1>Последние статьи</h1>
-        </div>
-
-        <div class="content container">
-                    {% if latest_articles_list %}
-                        {% for a in latest_articles_list %}
-                            <div class="post">
-                                <h2><a href="{% url 'articles:detail' a.id %}">{{a.article_title}}</a></h2>
-                                <div class = 'date'>
-                                    <p>Опубликовано: {{a.pub_date}}</p>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        Статьи не найдены =(
+    {% if latest_articles_list %}
+            {% for a in latest_articles_list %}
+                <div class="post">
+                    {% if user.is_authenticated %}
+                        <h2><a href="{% url 'articles:detail' a.id %}">{{a.article_title}}</a></h2>
                     {% endif %}
-        </div>
+                        <div class = 'datecom'>
+                            <p>Опубликовано: {{a.pub_date}}</p>
+                        </div>
+                </div>
+            {% endfor %}
+    {% else %}
+            Статьи не найдены =(
+    {% endif %}
 {% endblock %}

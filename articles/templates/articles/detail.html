@@ -3,20 +3,21 @@
 {% block title %}{{article.article_title}}{% endblock %}
 
 {% block content %}
- <div class="page-header">
-     <p><a href="/articles"> Назад к списку статей </a></p>
+ <div class="title">
      <h1>{{article.article_title}}</h1>
+     {% if user.is_authenticated %}
+        <a href="{% url 'articles:post_edit' article.id %}" ><span class="glyphicon glyphicon-plus"></span></a>
+     {% endif %}
     {% if article.was_published_recently %}
-    <em>СВЕЖАЯ СТАТЬЯ!</em>
+    <em>  СВЕЖАЯ СТАТЬЯ!</em>
      {% endif %}
  </div>
-<div class = 'content container'>
     <div class="post">
         <p>{{article.article_text|linebreaksbr}}</p>
         <div class = 'data'>
              <em>{{article.pub_date}}</em>
         </div>
-    </div>
+
     <hr>
     <p><h2>Комментарии:</h2></p>
     {% if latest_comments_list %}
@@ -29,11 +30,11 @@
             </p>
         {% endfor %}
     {% else %}
-    <strong>Комментарии не найдены</strong>
+    <em>Комментарии не найдены</em>
     {% endif %}
     <hr>
 
-    <form action="{% url 'articles:leave_comment' article.id %}" method="post">
+    <form action="{% url 'articles:leave_comment' article.id %}" method="post" class="post-form">
         {% csrf_token %}
         <input type="text" required placeholder="Ваше имя" name="name"><br>
         <textarea name="text" required="" placeholder="Тект комментария" cols="30" rows="10"></textarea><br>
